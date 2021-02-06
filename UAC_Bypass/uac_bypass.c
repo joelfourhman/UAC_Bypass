@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include <strsafe.h>
 
-// global handle
+// global handle to reg key
 HKEY regKey = NULL;
 
 BOOL CreateShellOpenCommandRegKey(WCHAR* key, WCHAR* value)
